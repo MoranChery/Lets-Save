@@ -2,8 +2,8 @@
 <div>
   <b-navbar type="dark" variant="dark">
   <!-- Image and text -->
-    <b-navbar-brand>
-      <img class="logo" src="../assets/logo.png" alt="Logo">
+    <b-navbar-brand class="logo">
+      <img class="logo-img" src="../assets/logo.png" alt="Logo">
       Smart Save
     </b-navbar-brand>
     <b-navbar-nav>
@@ -30,11 +30,8 @@ export default {
 }
 </script>
 <style scoped>
-  .logo{
+  ::v-deep .logo-img{
     display: inline;
-    color: #fff;
-    font-weight: bold;
-    font-size: 40px;
     border-radius: 100px;
     width: 40px;
     height: 40px;
@@ -43,12 +40,16 @@ export default {
     margin: 0;
     padding: 0;
   }
-  ::v-deep .nav-link {
+  ::v-deep {
     color: white !important;
     font-weight: bold;
   }
   ::v-deep .active .nav-link {
     color: #6d9af5 !important;
     font-weight: bold;
+  }
+  .logo{
+    padding-right: 15px;
+    font-size: 25px;
   }
 </style>
