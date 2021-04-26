@@ -1,33 +1,40 @@
 <template>
-  <div class="menu">
-    <nav class="main-nav">
-      <img class="logo" src="../assets/logo.png">
-      <div class="logo"> LET'S IMPROVE </div>
-      <ul class="nav-bar">
-        <li class="item-nav" ><router-link to="/">דף הבית</router-link></li>
-        <li class="item-nav"><router-link to="/about">קצת עלינו</router-link></li>
-      </ul>
-    </nav>
-  </div>
+<div>
+  <b-navbar type="dark" variant="dark">
+  <!-- Image and text -->
+    <b-navbar-brand>
+      <img class="logo" src="../assets/logo.png" alt="Logo">
+      Smart Save
+    </b-navbar-brand>
+    <b-navbar-nav>
+      <b-nav-item to="/" v-on:click="setActive('home')" :class="{ active: isActive('home') }">Home</b-nav-item>
+      <b-nav-item to="/about" v-on:click="setActive('about')" :class="{ active: isActive('about') }">PPF Calculator</b-nav-item>
+    </b-navbar-nav>
+  </b-navbar>
+</div>
 </template>
 <script>
 export default {
-  name: 'Menu'
+  name: 'Menu',
+  data () {
+    return { activeItem: 'home' }
+  },
+  methods: {
+    isActive: function (menuItem) {
+      return this.activeItem === menuItem
+    },
+    setActive: function (menuItem) {
+      this.activeItem = menuItem
+    }
+  }
 }
 </script>
-<style>
-  .menu{
-    padding-left: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    background: black;
-  }
-  .logo, .nav-bar{
-    text-align: center;
+<style scoped>
+  .logo{
     display: inline;
     color: #fff;
     font-weight: bold;
-    font-size: 30px;
+    font-size: 40px;
     border-radius: 100px;
     width: 40px;
     height: 40px;
@@ -35,22 +42,13 @@ export default {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    overflow: hidden;
   }
-  .item-nav{
-    padding-right: 20px;
-    float: right;
-    display: block;
+  ::v-deep .nav-link {
+    color: white !important;
+    font-weight: bold;
   }
-
-  .item-nav a {
-    color: white;
-    text-align: center;
-    padding: 16px;
-    text-decoration: none;
-  }
-
-  .item-nav a:hover {
-    background-color: #117eb8;
+  ::v-deep .active .nav-link {
+    color: #6d9af5 !important;
+    font-weight: bold;
   }
 </style>
