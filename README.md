@@ -1,5 +1,7 @@
 # Lets Improve
 
+This site was created to allow a comparison between a variety of provident funds for investment in Israel. I saw a need to build this site to allow people to compare provident funds using a simple calculator and system recommendations based on data.
+
 ## Project setup
 ```
 npm install
