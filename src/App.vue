@@ -20,7 +20,9 @@ export default {
     margin: 0;
   }
   #router{
+    padding-top: 10px;
     padding-left: 20px;
+    padding-bottom: 10px;
   }
 
 </style>
