@@ -4,6 +4,7 @@ from sqlalchemy import inspect
 
 from app.extensions import db
 
+
 class Results(db.Model):
     __tablename__ = 'results'
     name = db.Column(db.String, primary_key=True)
