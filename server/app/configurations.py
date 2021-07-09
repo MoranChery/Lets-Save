@@ -12,9 +12,9 @@ class Config(object):
     SECRET_KEY = 'e5ac358c-f0bf-11e5-9e39-d3b532c10a28'
 
     # Celery configurations
-    CELERY_BROKER_URL = 'redis://localhost:9090/0'
+    CELERY_BROKER_URL = 'redis://localhost:6380/0'
     CELERY_RESULT_BACKEND = 'rpc://'
-    CELERY_ACCEPT_CONTENT = ['json', 'npm']
+    CELERY_ACCEPT_CONTENT = ['json', 'yaml']
     CELERY_TASK_SERIALIZER = 'json'
     CELERY_RESULT_SERIALIZER = 'json'
     CELERY_TIMEZONE = 'UTC'

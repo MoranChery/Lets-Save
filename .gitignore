@@ -21,3 +21,7 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+/server/logs/
+/server/celerybeat-schedule.bak
+/server/celerybeat-schedule.dat
+/server/celerybeat-schedule.dir
