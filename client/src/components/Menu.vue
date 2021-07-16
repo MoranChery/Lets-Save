@@ -1,14 +1,13 @@
 <template>
 <div>
   <b-navbar type="dark" variant="dark">
-  <!-- Image and text -->
     <b-navbar-brand class="logo">
       <img class="logo-img" src="../assets/logo.png" alt="Logo">
       Smart Save
     </b-navbar-brand>
     <b-navbar-nav>
       <b-nav-item to="/" v-on:click="setActive('home')" :class="{ active: isActive('home') }">Home</b-nav-item>
-      <b-nav-item to="/about" v-on:click="setActive('about')" :class="{ active: isActive('about') }">PPF Calculator</b-nav-item>
+      <b-nav-item to="/calculator" v-on:click="setActive('calculator')" :class="{ active: isActive('calculator') }">PPF Calculator</b-nav-item>
     </b-navbar-nav>
   </b-navbar>
 </div>
