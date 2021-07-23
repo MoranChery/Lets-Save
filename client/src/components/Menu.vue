@@ -7,7 +7,7 @@
     </b-navbar-brand>
     <b-navbar-nav>
       <b-nav-item to="/" v-on:click="setActive('home')" :class="{ active: isActive('home') }">Home</b-nav-item>
-      <b-nav-item to="/calculator" v-on:click="setActive('calculator')" :class="{ active: isActive('calculator') }">PPF Calculator</b-nav-item>
+      <b-nav-item to="/provident_fund_calculator" v-on:click="setActive('provident_fund_calculator')" :class="{ active: isActive('provident_fund_calculator') }">PPF Calculator</b-nav-item>
     </b-navbar-nav>
   </b-navbar>
 </div>

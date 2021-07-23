@@ -1,3 +1,4 @@
 def register_models():
-    from .results import Results
+    from .provident_fund import ProvidentFund
+    from .definitions import Definitions
 

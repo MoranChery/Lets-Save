@@ -1,7 +1,7 @@
 <template>
-  <div class="filters">
+  <div>
     <h2>סינונים אפשריים:</h2>
-    <h4>שים לב כי במידה ואינך יודע אשאר את הנתונים כפי שהם</h4>
+    <h6>&#9888;שים לב כי במידה ואינך יודע אשאר את הנתונים כפי שהם</h6>
     <div class="wrapper">
       <p>בחר חברות:</p>
       <multiselect v-model="selected_company" placeholder="הוסף או הסר חברה" selectedLabel="" deselectLabel="הסר" selectLabel="בחר" :options="companies_options" :multiple="true"></multiselect>
@@ -50,14 +50,6 @@ export default {
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped>
-  .filters{
-    padding: 10px;
-    background: rgb(101, 171, 171);
-    height: 100%;
-    text-align: justify;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    margin-bottom: 15px;
-  }
   h2 {
     direction: rtl;
     font-size: 25px;
