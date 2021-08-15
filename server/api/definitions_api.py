@@ -8,12 +8,56 @@ from models.definitions import Definitions
 class AddDefinition(MethodView):
 
     def post(self):
-        data = request.get_json()
-        definitions_name = data.get("definitions_name")
-        description = data.get("description")
-        new_description = Definitions (definitions_name=definitions_name, description=description)
-        db.session.add(new_description)
-        db.session.commit()
+        description_needed = [
+                                {
+                                    "definitions_name":'FUND_NAME',
+                                    "description": "שם המסלול לפי  החברה - לא חלק משאלות ששואלים את המשתמש"
+                                },
+                                {
+                                    "definitions_name": 'FUND_CLASSIFICATION',
+                                    "description": "סוג הקופה"
+                                },
+                                {
+                                    "definitions_name": 'MANAGING_CORPORATION',
+                                    "description": "החברה שמנהלת את הקופה"
+                                },
+                                {
+                                    "definitions_name": 'TARGET_POPULATION',
+                                    "description": "אוכלוסיית יעד"
+                                },
+                                {
+                                    "definitions_name": 'SPECIALIZATION',
+                                    "description": "התמחות עיקרית"
+                                },
+                                {
+                                    "definitions_name": 'SUB_SPECIALIZATION',
+                                    "description": "התמחות משנית"
+                                },
+                                {
+                                    "definitions_name": "AVG_ANNUAL_MANAGEMENT_FEE",
+                                    "description": "דמי ניהול ממוצעים- מחסכון"
+                                },
+                                {
+                                     "definitions_name": "AVG_DEPOSIT_FEE",
+                                     "description": "דמי ניהול ממוצעים- מהפקדה"
+                                },
+                                {
+                                    "definitions_name": "YEAR_TO_DATE_YIELD",
+                                    "description": "תשואה שנתית"
+                                },
+                                {
+                                    "definitions_name": "AVG_ANNUAL_YIELD_TRAILING_3YRS",
+                                    "description": "תשואה מצטברת ל-3 שנים"
+                                },
+                                {
+                                    "definitions_name": "AVG_ANNUAL_YIELD_TRAILING_5YRS",
+                                    "description": "תשואה מצטברת ל-5 שנים"
+                                }
+                            ]
+        for definition in description_needed:
+            new_description = Definitions(definitions_name=definition["definitions_name"], description=definition["description"])
+            db.session.add(new_description)
+            db.session.commit()
         response = make_response(jsonify(message='add new definition'), 200)
         return response
 
