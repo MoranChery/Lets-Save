@@ -1,7 +1,9 @@
 from celery import Celery
 from flask import Flask
 
+
 def configure_celery(app: Flask):
+
 
     celery = Celery(__name__, include=['celery_tasks.worker_tasks'])
 

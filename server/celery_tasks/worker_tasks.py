@@ -23,17 +23,17 @@ app = create_app()
 celery = configure_celery(app)
 
 @celery.task(
-    run_every=(crontab(minute=6, hour=13)),# Israel time = UTC + 3
-    name='hello_word', bind=True)
+    run_every=(crontab(minute=46, hour=9)),# Israel time = UTC + 3
+    name="hello_word", ignore_result=True)
 def hello_word():
-    print("hello_word start 1")
+
     with app.app_context():
 
         print("hello_word start 2- part 1 : get info from url and create df")
         url_data = 'https://data.gov.il/api/3/action/datastore_search?resource_id=a30dcbea-a1d2-482c-ae29-8f781f5025fb&limit=2855'
-        web_URL = urllib.request.urlopen(url_data)
-        data = web_URL.read()
-        encoding = web_URL.info().get_content_charset('utf-8')
+        web_url = urllib.request.urlopen(url_data)
+        data = web_url.read()
+        encoding = web_url.info().get_content_charset('utf-8')
         json_data = json.loads(data.decode(encoding))
         records = json_data['result']['records']
         df = pd.json_normalize(records)
@@ -64,6 +64,11 @@ def hello_word():
                    'AVG_ANNUAL_YIELD_TRAILING_5YRS']  # תשואה מצטברת ל-5 שנים
         df_need_col = pd.DataFrame(df, columns=columns)
         df_need_col_all_pop = df_need_col[df_need_col.TARGET_POPULATION == 'כלל האוכלוסיה']
+
+        print("hello_word start 3- Start: Add data to table")
+        with db.engine.begin() as connection:
+            df_need_col_all_pop.to_sql('provident_fund', db.engine, if_exists='append', index=False)
+        print("hello_word start 3- Done: Add data to table")
 
 # @celery.task(name='execute_rebalance', bind=True)
 # def execute_rebalance(self, link, user_id):

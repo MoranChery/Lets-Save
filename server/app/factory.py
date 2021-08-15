@@ -16,10 +16,10 @@ def create_app():
     db.init_app(app)
 
     # imports api_s
-    # from api.users_api import api as users_api
+    from api.definitions_api import api as definitions_api
 
     # register api_s
-    # app.register_blueprint(users_api)
+    app.register_blueprint(definitions_api)
 
 
     # Create tables
