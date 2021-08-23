@@ -22,8 +22,8 @@ import datetime
 app = create_app()
 celery = configure_celery(app)
 
-@celery.task(
-    run_every=(crontab(minute=46, hour=9)),# Israel time = UTC + 3
+@periodic_task(
+    run_every=(crontab(minute=42, hour=16)),# Israel time = UTC + 3
     name="hello_word", ignore_result=True)
 def hello_word():
 
