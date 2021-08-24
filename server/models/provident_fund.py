@@ -7,16 +7,16 @@ class ProvidentFund(db.Model):
     __tablename__ = 'provident_fund'
 
     fund_name = db.Column(db.String, primary_key=True)
-    fund_classification =  db.Column(db.String, nullable=False)
+    fund_classification = db.Column(db.String, nullable=False)
     management_corporation = db.Column(db.String, nullable=False)
     target_population = db.Column(db.String, nullable=False)
     specialization = db.Column(db.String, nullable=False)
-    sub_specialization = db.Column(db.String, nullable=False)
-    avg_annual_management_fee = db.Column(db.DECIMAL, nullable=False)
-    avg_deposit_fee = db.Column(db.DECIMAL, nullable=False)
-    year_to_date_yield = db.Column(db.DECIMAL, nullable=False)
-    avg_annual_yield_trailing_3yrs = db.Column(db.DECIMAL, nullable=False)
-    avg_annual_yield_trailing_5yrs = db.Column(db.DECIMAL, nullable=False)
+    sub_specialization = db.Column(db.String, nullable=True)
+    avg_annual_management_fee = db.Column(db.DECIMAL, nullable=True)
+    avg_deposit_fee = db.Column(db.DECIMAL, nullable=True)
+    year_to_date_yield = db.Column(db.DECIMAL, nullable=True)
+    avg_annual_yield_trailing_3yrs = db.Column(db.DECIMAL, nullable=True)
+    avg_annual_yield_trailing_5yrs = db.Column(db.DECIMAL, nullable=True)
 
     @staticmethod
     def columns():
