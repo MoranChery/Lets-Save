@@ -4,9 +4,9 @@
       <h6>&#9888;שים לב כי את הפרטים הבאים חובה עליך למלא</h6>
       <div class="wrapper">
         <p>הפקדה חד פעמית (ש"ח):</p>
-        <input id="oneTimeDeposit" Placeholder= "הזן סכום" v-model="oneTimeDeposit" min="0" type="number"/>
+        <input id="oneTimeDeposit" Placeholder= "הזן מספר (0 או יותר)" v-model="oneTimeDeposit" min="0" type="number"/>
         <p>הפקדה חודשית (ש"ח):</p>
-        <input id="mDeposit" Placeholder= "הזן סכום" v-model="mDeposit"  type="number" min="0"/>
+        <input id="mDeposit" Placeholder= "הזן מספר (0 או יותר)" v-model="mDeposit"  type="number" min="0"/>
         <p>לפי:</p>
         <select v-model="selectedTime">
           <option>שנים</option>

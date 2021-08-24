@@ -1,7 +1,9 @@
 <template>
   <div class="provident_fund_calculator">
-    <h1>מחשבון קופת גמל</h1>
-    <h6>מעוניין להפקיד מידי חודש סכום מסויים ו/או הפקדה חד פעמית  כדי להבטיח לך בסיס כלכלי ואינך יודע מהו הסכום, באמצעות מחשבון הגמל תוכל לקבל הערכה לגבי סכום הצבירה הצפוי לך בהפקדה חד פעמית ו/או שוטפת</h6>
+    <div class="sticky">
+      <h1>מחשבון קופת גמל</h1>
+      <h6>מעוניין להפקיד מידי חודש סכום מסויים ו/או הפקדה חד פעמית  כדי להבטיח לך בסיס כלכלי ואינך יודע מהו הסכום, באמצעות מחשבון הגמל תוכל לקבל הערכה לגבי סכום הצבירה הצפוי לך בהפקדה חד פעמית ו/או שוטפת</h6>
+    </div>
     <Calculator class="filters"/>
     <Filters class="filters"/>
     <button>חשב</button>
@@ -20,9 +22,16 @@ export default {
 </script>
 <style scoped>
   .provident_fund_calculator {
-    margin: 15px;
+    padding-top: 50px;
     text-align: justify;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  .sticky{
+    position: sticky;
+    background-color: white;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    top: 65px;
   }
   h1{
     direction: rtl;
