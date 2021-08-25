@@ -3,8 +3,6 @@
     <h2>סינונים אפשריים:</h2>
     <h6>&#9888;שים לב כי במידה ואינך יודע אשאר את הנתונים כפי שהם</h6>
     <div class="wrapper">
-      <p>בחר חברות:</p>
-      <multiselect v-model="selected_company" placeholder="הוסף או הסר חברה" selectedLabel="" deselectLabel="הסר" selectLabel="בחר" :options="companies_options" :multiple="true"></multiselect>
       <p>בחר מסלולים:</p>
       <multiselect v-model="selected_investment_track" placeholder="הוסף או הסר מסלול" selectedLabel="" deselectLabel="הסר" selectLabel="בחר" :options="investment_track_options" :multiple="true"></multiselect>
       <p>דמי ניהול עד:</p>
@@ -24,12 +22,13 @@ export default {
   components: { Multiselect },
   data: function () {
     return {
-      selected_company: ['opt1', 'opt2', 'opt3', 'opt4cdwcdfvdswsdcdwa', 'opt5', 'opt6', 'opt7', 'opt8'],
-      companies_options: ['opt1', 'opt2', 'opt3', 'opt4cdwcdfvdswsdcdwa', 'opt5', 'opt6', 'opt7', 'opt8'],
-      selected_investment_track: ['opt1בהגכדקכבגרקככרק', 'opt2', 'opt3'],
-      investment_track_options: ['opt1בהגכדקכבגרקככרק', 'opt2', 'opt3'],
+      selected_investment_track: [],
+      investment_track_options: [],
       management_fee: 2
     }
+  },
+  created () {
+    this.getInvestmentTrackOptions()
   },
   computed: {
     inpNum: function () {
@@ -43,6 +42,24 @@ export default {
         this.management_fee = val
       } else {
         event.target.value = this.management_fee
+      }
+    },
+    async getInvestmentTrackOptions () {
+      try {
+        // get companies_options and selected_company
+        const response = await this.$http.get('investmentTrackOptions/')
+        // JSON responses are automatically parsed.
+        for (const arr in response.data.json_list) {
+          for (const investmentTrack in arr) {
+            const investmentTrackStr = response.data.json_list[arr][investmentTrack]
+            if (investmentTrackStr) {
+              this.investment_track_options.push(investmentTrackStr)
+              this.selected_investment_track.push(investmentTrackStr)
+            }
+          }
+        }
+      } catch (error) {
+        console.log(error)
       }
     }
   }
@@ -69,7 +86,7 @@ export default {
     row-gap: 1em;
   }
   .multiselect {
-    width: 800px;
+    width: 600px;
     height: 80px;
   }
 
