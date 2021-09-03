@@ -25,11 +25,12 @@ export default {
   }
   .logo-img{
     border-radius: 300px;
-    width: 210px;
-    height: 210px;
+    width: 200px;
+    height: 200px;
     display: block;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 10px;
   }
   .css-typing{
     padding: 0 140px;

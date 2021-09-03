@@ -13,7 +13,7 @@ celery = configure_celery(app)
 
 
 @periodic_task(
-    crontab(month_of_year="1,5,9", day_of_month=1, hour=8, minute=30),  # Israel time = UTC + 3
+    run_every=crontab(month_of_year="1,5,9", day_of_month=1, hour=8, minute=30),  # Israel time = UTC + 3
     name="get_provident_fund_data_and_add_to_db", ignore_result=True)
 def get_provident_fund_data_and_add_to_db():
     with app.app_context():
