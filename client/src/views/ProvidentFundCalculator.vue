@@ -4,7 +4,7 @@
       <h1>מחשבון קופת גמל</h1>
       <h6>מעוניין להפקיד מידי חודש סכום מסויים ו/או הפקדה חד פעמית  כדי להבטיח לך בסיס כלכלי ואינך יודע מהו הסכום, באמצעות מחשבון הגמל תוכל לקבל הערכה לגבי סכום הצבירה הצפוי לך בהפקדה חד פעמית ו/או שוטפת</h6>
     </div>
-    <Calculator class="filters"/>
+    <Calculator v-bind:is-valid-data="isValidData" class="filters"/>
     <Filters class="filters"/>
     <button>חשב</button>
   </div>
@@ -17,6 +17,11 @@ export default {
   components: {
     Filters,
     Calculator
+  },
+  data: function () {
+    return {
+      isValidData: true
+    }
   }
 }
 </script>
