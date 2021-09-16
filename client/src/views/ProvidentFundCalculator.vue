@@ -4,9 +4,9 @@
       <h1>מחשבון קופת גמל</h1>
       <h6>מעוניין להפקיד מידי חודש סכום מסויים ו/או הפקדה חד פעמית  כדי להבטיח לך בסיס כלכלי ואינך יודע מהו הסכום, באמצעות מחשבון הגמל תוכל לקבל הערכה לגבי סכום הצבירה הצפוי לך בהפקדה חד פעמית ו/או שוטפת</h6>
     </div>
-    <Calculator v-bind:is-valid-data="isValidData" class="filters"/>
+    <Calculator :provident-fund-calculator-data="providentFundCalculatorData" class="filters"/>
     <Filters class="filters"/>
-    <button>חשב</button>
+    <button @click="printProvidentFundCalculatorData">חשב</button>
   </div>
 </template>
 <script>
@@ -20,7 +20,32 @@ export default {
   },
   data: function () {
     return {
-      isValidData: true
+      providentFundCalculatorData: {
+        oneTimeDeposit: 0,
+        mDeposit: 0,
+        numTime: 1,
+        selectedTime: 'שנים',
+        selectedYearsCompared: 'לפי השנה האחרונה',
+        isValidOneTimeDeposit: true,
+        isValidMDeposit: true
+      }
+    }
+  },
+  methods: {
+    printProvidentFundCalculatorData () {
+      console.log('Click:', this.providentFundCalculatorData)
+      if (typeof (this.providentFundCalculatorData.oneTimeDeposit) === 'number') {
+        console.log('oneTimeDeposit type number')
+        if (this.providentFundCalculatorData.oneTimeDeposit === 0) {
+          console.log('oneTimeDeposit type number and is 0')
+          this.$set(this.providentFundCalculatorData, 'isValidOneTimeDeposit', false)
+          this.$set(this.providentFundCalculatorData, 'isValidMDeposit', false)
+        }
+      } else if (typeof (this.providentFundCalculatorData.oneTimeDeposit) === 'object') {
+        console.log('oneTimeDeposit type object')
+      } else if (typeof (this.providentFundCalculatorData.oneTimeDeposit) === 'string') {
+        console.log('oneTimeDeposit type string')
+      }
     }
   }
 }

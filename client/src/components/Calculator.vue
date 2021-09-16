@@ -4,34 +4,34 @@
       <h6>&#9888;שים לב כי את הפרטים הבאים חובה עליך למלא</h6>
       <div class="wrapper">
         <p>הפקדה חד פעמית (ש"ח):</p>
-        <input id="oneTimeDeposit" Placeholder= "הזן מספר (0 או יותר)" v-model="oneTimeDeposit" min="0" type="number"/>
+        <input id="oneTimeDeposit" Placeholder= "הזן מספר (0 או יותר)" v-bind:value="providentFundCalculatorData.oneTimeDeposit" @input="update('oneTimeDeposit', $event.target.value)" min="0" type="number"/>
       </div>
       <div class="wrapper">
         <p>הפקדה חודשית (ש"ח):</p>
-        <input id="mDeposit" Placeholder= "הזן מספר (0 או יותר)" v-model="mDeposit"  type="number" min="0"/>
+        <input id="mDeposit" Placeholder= "הזן מספר (0 או יותר)" v-bind:value="providentFundCalculatorData.mDeposit" @input="update('mDeposit', $event.target.value)" type="number" min="0"/>
       </div>
-      <div v-if="!isValidData" class="wrapper-alert">
-        <h6 style="font-size:24px; font-weight: bold;"> &#128712;</h6>
-        <h6>הפקדה חד פעמית או הפקדה חודשית צריכים להיות גדולים מ-0</h6>
+      <div v-if="!providentFundCalculatorData.isValidMDeposit" class="wrapper-alert">
+          <h6 style="font-size:24px; font-weight: bold;"> &#128712;</h6>
+          <h6>הפקדה חד פעמית או הפקדה חודשית צריכים להיות גדולים מ-0</h6>
       </div>
       <div class="wrapper">
         <p>לפי:</p>
-        <select v-model="selectedTime">
-          <option>שנים</option>
+        <select v-model="selectedTime" @select="update('selectedTime', $event.target.value)">
+          <option >שנים</option>
           <option>חודשים</option>
         </select>
       </div>
       <div class="wrapper">
         <p>לכמה {{selectedTime}}:</p>
-        <input id="numTime" Placeholder= "הזן מספר" v-model="numTime"  type="number" min="1"/>
+        <input id="numTime" Placeholder= "הזן מספר" v-bind:value="providentFundCalculatorData.numTime" @input="update('numTime', $event.target.value)" type="number" min="1"/>
       </div>
-      <div v-if="!isValidData" class="wrapper-alert">
+      <div v-if="!providentFundCalculatorData.isValidMDeposit" class="wrapper-alert">
         <h6 style="font-size:24px; font-weight: bold;"> &#128712;</h6>
         <h6>מספר ה{{selectedTime}} חייב להיות 1 או יותר</h6>
       </div>
       <div class="wrapper">
         <p>חישוב תשואה:</p>
-        <select v-model="selectedYearsCompared">
+        <select v-model="selectedYearsCompared" @select="update('selectedYearsCompared', $event.target.value)">
           <option>לפי השנה האחרונה</option>
           <option>לפי ה-3 שנים האחרונות</option>
           <option>לפי ה-5 שנים האחרונות</option>
@@ -45,15 +45,46 @@ export default {
   name: 'Calculator',
   data: function () {
     return {
-      oneTimeDeposit: '',
-      mDeposit: '',
-      numTime: 1,
       selectedTime: 'שנים',
-      selectedYearsCompared: 'לפי השנה האחרונה'
+      selectedYearsCompared: 'לפי השנה האחרונה',
+      isValidOneTimeDeposit: true
     }
   },
   props: {
-    isValidData: Boolean
+    providentFundCalculatorData: {
+      type: Object,
+      default: function () {
+        return {
+          oneTimeDeposit: {
+            type: Number
+          },
+          mDeposit: {
+            type: Number
+          },
+          numTime: {
+            type: Number
+          },
+          selectedTime: {
+            type: String
+          },
+          selectedYearsCompared: {
+            type: String
+          },
+          isValidOneTimeDeposit: {
+            type: Boolean
+          },
+          isValidMDeposit: {
+            type: Boolean
+          }
+        }
+      }
+    }
+  },
+  methods: {
+    update (key, value) {
+      this.providentFundCalculatorData[key] = value
+      this.$emit('input', { ...this.providentFundCalculatorData })
+    }
   }
 }
 </script>
