@@ -46,8 +46,7 @@ export default {
   data: function () {
     return {
       selectedTime: 'שנים',
-      selectedYearsCompared: 'לפי השנה האחרונה',
-      isValidOneTimeDeposit: true
+      selectedYearsCompared: 'לפי השנה האחרונה'
     }
   },
   props: {
