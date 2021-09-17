@@ -95,6 +95,9 @@ export default {
   .provident_fund_calculator {
     padding-top: 50px;
     text-align: justify;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1%;
   }
   .sticky{
     position: sticky;
@@ -108,7 +111,7 @@ export default {
   }
   h6 {
     direction: rtl;
-    margin-left: 20%;
+    margin-left: 10%;
   }
   .filters{
     direction: rtl;
