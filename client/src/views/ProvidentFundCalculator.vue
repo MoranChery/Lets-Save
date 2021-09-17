@@ -39,8 +39,7 @@ export default {
     }
   },
   methods: {
-    getProvidentFundCalculatorData () {
-      console.log(this.filtersData)
+    validation () {
       let isValidOneDeposit = true
       let isValidMDeposit = true
       let isValidSelectedTime = true
@@ -134,8 +133,27 @@ export default {
       } else {
         this.$set(this.filtersData, 'isValidManagementFee', true)
       }
+      let sendRequestToServer = false
       if (this.providentFundCalculatorData.isValidMDepositAndOneDeposit && isValidSelectedTime && isValidManagementFee) {
+        sendRequestToServer = true
         console.log('send request to server')
+      }
+      return sendRequestToServer
+    },
+    async getProvidentFundCalculatorData () {
+      const toSendRequest = this.validation()
+      if (toSendRequest) {
+        console.log('send request to server - getProvidentFundCalculatorData')
+        try {
+          // get recommended provident funds
+          const response = await this.$http.get('recommendedProvidentFunds/')
+          // JSON responses are automatically parsed.
+          for (const providentFund in response.data.json_list) {
+            console.log(providentFund)
+          }
+        } catch (error) {
+          console.log(error)
+        }
       }
     }
   }
