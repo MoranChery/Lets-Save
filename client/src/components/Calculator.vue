@@ -10,7 +10,7 @@
         <p>הפקדה חודשית (ש"ח):</p>
         <input id="mDeposit" Placeholder= "הזן מספר (0 או יותר)" v-bind:value="providentFundCalculatorData.mDeposit" @input="update('mDeposit', $event.target.value)" type="number" min="0"/>
       </div>
-      <div v-if="!providentFundCalculatorData.isValidMDeposit" class="wrapper-alert">
+      <div v-if="!providentFundCalculatorData.isValidMDepositAndOneDeposit" class="wrapper-alert">
           <h6 style="font-size:24px; font-weight: bold;"> &#128712;</h6>
           <h6>הפקדה חד פעמית או הפקדה חודשית צריכים להיות גדולים מ-0</h6>
       </div>
@@ -25,7 +25,7 @@
         <p>לכמה {{selectedTime}}:</p>
         <input id="numTime" Placeholder= "הזן מספר" v-bind:value="providentFundCalculatorData.numTime" @input="update('numTime', $event.target.value)" type="number" min="1"/>
       </div>
-      <div v-if="!providentFundCalculatorData.isValidMDeposit" class="wrapper-alert">
+      <div v-if="!providentFundCalculatorData.isValidSelectedTime" class="wrapper-alert">
         <h6 style="font-size:24px; font-weight: bold;"> &#128712;</h6>
         <h6>מספר ה{{selectedTime}} חייב להיות 1 או יותר</h6>
       </div>
@@ -69,10 +69,10 @@ export default {
           selectedYearsCompared: {
             type: String
           },
-          isValidOneTimeDeposit: {
+          isValidMDepositAndOneDeposit: {
             type: Boolean
           },
-          isValidMDeposit: {
+          isValidSelectedTime: {
             type: Boolean
           }
         }

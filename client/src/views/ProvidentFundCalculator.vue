@@ -26,25 +26,66 @@ export default {
         numTime: 1,
         selectedTime: 'שנים',
         selectedYearsCompared: 'לפי השנה האחרונה',
-        isValidOneTimeDeposit: true,
-        isValidMDeposit: true
+        isValidMDepositAndOneDeposit: true,
+        isValidSelectedTime: true
       }
     }
   },
   methods: {
     printProvidentFundCalculatorData () {
-      console.log('Click:', this.providentFundCalculatorData)
+      let isValidOneDeposit = true
+      let isValidMDeposit = true
+      let isValidSelectedTime = true
       if (typeof (this.providentFundCalculatorData.oneTimeDeposit) === 'number') {
-        console.log('oneTimeDeposit type number')
-        if (this.providentFundCalculatorData.oneTimeDeposit === 0) {
-          console.log('oneTimeDeposit type number and is 0')
-          this.$set(this.providentFundCalculatorData, 'isValidOneTimeDeposit', false)
-          this.$set(this.providentFundCalculatorData, 'isValidMDeposit', false)
-        }
+        isValidOneDeposit = false
       } else if (typeof (this.providentFundCalculatorData.oneTimeDeposit) === 'object') {
-        console.log('oneTimeDeposit type object')
+        isValidOneDeposit = false
       } else if (typeof (this.providentFundCalculatorData.oneTimeDeposit) === 'string') {
-        console.log('oneTimeDeposit type string')
+        if (this.providentFundCalculatorData.oneTimeDeposit === '') {
+          console.log('oneTimeDeposit type string and it empty')
+          isValidOneDeposit = false
+        } else {
+          const oneTimeDepositNum = Number(this.providentFundCalculatorData.oneTimeDeposit)
+          if (oneTimeDepositNum === 0) {
+            isValidOneDeposit = false
+          }
+        }
+      }
+      if (typeof (this.providentFundCalculatorData.mDeposit) === 'number') {
+        isValidMDeposit = false
+      } else if (typeof (this.providentFundCalculatorData.mDeposit) === 'object') {
+        isValidMDeposit = false
+      } else if (typeof (this.providentFundCalculatorData.mDeposit) === 'string') {
+        if (this.providentFundCalculatorData.mDeposit === '') {
+          isValidMDeposit = false
+        } else {
+          const mDepositNum = Number(this.providentFundCalculatorData.mDeposit)
+          if (mDepositNum === 0) {
+            isValidMDeposit = false
+          }
+        }
+      }
+      if (typeof (this.providentFundCalculatorData.numTime) === 'object') {
+        isValidSelectedTime = false
+      } else if (typeof (this.providentFundCalculatorData.numTime) === 'string') {
+        if (this.providentFundCalculatorData.numTime === '') {
+          isValidSelectedTime = false
+        } else {
+          const numTimeNum = Number(this.providentFundCalculatorData.numTime)
+          if (numTimeNum === 0) {
+            isValidSelectedTime = false
+          }
+        }
+      }
+      if (!isValidOneDeposit && !isValidMDeposit) {
+        this.$set(this.providentFundCalculatorData, 'isValidMDepositAndOneDeposit', false)
+      } else {
+        this.$set(this.providentFundCalculatorData, 'isValidMDepositAndOneDeposit', true)
+      }
+      if (!isValidSelectedTime) {
+        this.$set(this.providentFundCalculatorData, 'isValidSelectedTime', false)
+      } else {
+        this.$set(this.providentFundCalculatorData, 'isValidSelectedTime', true)
       }
     }
   }
