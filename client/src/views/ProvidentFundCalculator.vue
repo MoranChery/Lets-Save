@@ -6,7 +6,7 @@
     </div>
     <Calculator :provident-fund-calculator-data="providentFundCalculatorData" class="filters"/>
     <Filters class="filters"/>
-    <button @click="printProvidentFundCalculatorData">חשב</button>
+    <button @click="getProvidentFundCalculatorData">חשב</button>
   </div>
 </template>
 <script>
@@ -32,7 +32,7 @@ export default {
     }
   },
   methods: {
-    printProvidentFundCalculatorData () {
+    getProvidentFundCalculatorData () {
       let isValidOneDeposit = true
       let isValidMDeposit = true
       let isValidSelectedTime = true
