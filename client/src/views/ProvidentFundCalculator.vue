@@ -5,7 +5,7 @@
       <h6>מעוניין להפקיד מידי חודש סכום מסויים ו/או הפקדה חד פעמית  כדי להבטיח לך בסיס כלכלי ואינך יודע מהו הסכום, באמצעות מחשבון הגמל תוכל לקבל הערכה לגבי סכום הצבירה הצפוי לך בהפקדה חד פעמית ו/או שוטפת</h6>
     </div>
     <Calculator :provident-fund-calculator-data="providentFundCalculatorData" class="filters"/>
-    <Filters class="filters"/>
+    <Filters :filters-data="filtersData" class="filters"/>
     <button @click="getProvidentFundCalculatorData">חשב</button>
   </div>
 </template>
@@ -28,14 +28,23 @@ export default {
         selectedYearsCompared: 'לפי השנה האחרונה',
         isValidMDepositAndOneDeposit: true,
         isValidSelectedTime: true
+      },
+      filtersData: {
+        management_fee: 2,
+        selected_investment_track: [],
+        isValidSelectedInvestmentTrack: true,
+        isValidManagementFee: true,
+        height: 100
       }
     }
   },
   methods: {
     getProvidentFundCalculatorData () {
+      console.log(this.filtersData)
       let isValidOneDeposit = true
       let isValidMDeposit = true
       let isValidSelectedTime = true
+      let isValidManagementFee = true
       if (typeof (this.providentFundCalculatorData.oneTimeDeposit) === 'number') {
         isValidOneDeposit = false
       } else if (typeof (this.providentFundCalculatorData.oneTimeDeposit) === 'object') {
@@ -45,8 +54,12 @@ export default {
           console.log('oneTimeDeposit type string and it empty')
           isValidOneDeposit = false
         } else {
-          const oneTimeDepositNum = Number(this.providentFundCalculatorData.oneTimeDeposit)
-          if (oneTimeDepositNum === 0) {
+          try {
+            const oneTimeDepositNum = Number(this.providentFundCalculatorData.oneTimeDeposit)
+            if (oneTimeDepositNum === 0) {
+              isValidOneDeposit = false
+            }
+          } catch (e) {
             isValidOneDeposit = false
           }
         }
@@ -59,8 +72,12 @@ export default {
         if (this.providentFundCalculatorData.mDeposit === '') {
           isValidMDeposit = false
         } else {
-          const mDepositNum = Number(this.providentFundCalculatorData.mDeposit)
-          if (mDepositNum === 0) {
+          try {
+            const mDepositNum = Number(this.providentFundCalculatorData.mDeposit)
+            if (mDepositNum === 0) {
+              isValidMDeposit = false
+            }
+          } catch (e) {
             isValidMDeposit = false
           }
         }
@@ -71,8 +88,12 @@ export default {
         if (this.providentFundCalculatorData.numTime === '') {
           isValidSelectedTime = false
         } else {
-          const numTimeNum = Number(this.providentFundCalculatorData.numTime)
-          if (numTimeNum === 0) {
+          try {
+            const numTimeNum = Number(this.providentFundCalculatorData.numTime)
+            if (numTimeNum === 0) {
+              isValidSelectedTime = false
+            }
+          } catch (e) {
             isValidSelectedTime = false
           }
         }
@@ -86,6 +107,35 @@ export default {
         this.$set(this.providentFundCalculatorData, 'isValidSelectedTime', false)
       } else {
         this.$set(this.providentFundCalculatorData, 'isValidSelectedTime', true)
+      }
+      if (this.filtersData.selected_investment_track.length === 0) {
+        this.$set(this.filtersData, 'isValidSelectedInvestmentTrack', false)
+        this.$set(this.filtersData, 'height', 40)
+      } else {
+        this.$set(this.filtersData, 'isValidSelectedInvestmentTrack', true)
+        this.$set(this.filtersData, 'height', 80)
+      }
+      if (typeof (this.filtersData.management_fee) === 'string') {
+        if (this.filtersData.management_fee === '') {
+          isValidManagementFee = false
+        } else {
+          try {
+            const managementFeeNum = Number(this.filtersData.management_fee)
+            if (managementFeeNum === 0) {
+              isValidManagementFee = false
+            }
+          } catch (e) {
+            isValidManagementFee = false
+          }
+        }
+      }
+      if (!isValidManagementFee) {
+        this.$set(this.filtersData, 'isValidManagementFee', false)
+      } else {
+        this.$set(this.filtersData, 'isValidManagementFee', true)
+      }
+      if (this.providentFundCalculatorData.isValidMDepositAndOneDeposit && isValidSelectedTime && isValidManagementFee) {
+        console.log('send request to server')
       }
     }
   }

@@ -4,14 +4,22 @@
     <h6>&#9888;שים לב כי במידה ואינך יודע אשאר את הנתונים כפי שהם</h6>
     <div class="wrapper">
       <p>בחר מסלולים:</p>
-      <multiselect v-model="selected_investment_track" placeholder="הוסף או הסר מסלול" selectedLabel="" deselectLabel="הסר" selectLabel="בחר" :options="investment_track_options" :multiple="true"></multiselect>
+      <multiselect :style="cssVars" v-model="filtersData.selected_investment_track" placeholder="הוסף או הסר מסלול" selectedLabel="" deselectLabel="הסר" selectLabel="בחר" :options="investment_track_options" :multiple="true" @change="update('selected_investment_track', $event.target.value)"></multiselect>
+    </div>
+    <div v-if="!filtersData.isValidSelectedInvestmentTrack" class="wrapper-alert">
+      <h6 style="font-size:24px; font-weight: bold;"> &#128712;</h6>
+      <h6>יש לבחור לפחות מסלול אחד</h6>
+    </div>
+    <div class="wrapper">
       <p>דמי ניהול עד:</p>
       <div class="wrapper">
-        <input type="text"
-               Placeholder= "יש לשים מספר"
-               @input="change" @change="change" :value="inpNum"/>
+        <input id="management_fee" Placeholder= "יש לשים מספר" v-bind:value="filtersData.management_fee" @input="update('management_fee', $event.target.value)" min="0" type="number"/>
         <p>%</p>
       </div>
+    </div>
+    <div v-if="!filtersData.isValidManagementFee" class="wrapper-alert">
+      <h6 style="font-size:24px; font-weight: bold;"> &#128712;</h6>
+      <h6>יש לבחור לפחות מסלול אחד</h6>
     </div>
   </div>
 </template>
@@ -20,9 +28,29 @@ import Multiselect from 'vue-multiselect'
 export default {
   name: 'Filters',
   components: { Multiselect },
+  props: {
+    filtersData: {
+      type: Object,
+      default: function () {
+        return {
+          management_fee: {
+            type: Number
+          },
+          selected_investment_track: {
+            type: Array
+          },
+          isValidSelectedInvestmentTrack: {
+            type: Boolean
+          },
+          isValidManagementFee: {
+            type: Boolean
+          }
+        }
+      }
+    }
+  },
   data: function () {
     return {
-      selected_investment_track: [],
       investment_track_options: [],
       management_fee: 2
     }
@@ -31,36 +59,36 @@ export default {
     this.getInvestmentTrackOptions()
   },
   computed: {
-    inpNum: function () {
-      return this.management_fee
+    cssVars () {
+      return {
+        /* variables you want to pass to css */
+        '--height': this.filtersData.height
+      }
     }
   },
   methods: {
-    change (event) {
-      const val = event.target.value.trim()
-      if (/^[0-9]*\.?[0-9]*\d*$|^$/.test(val)) {
-        this.management_fee = val
-      } else {
-        event.target.value = this.management_fee
-      }
-    },
     async getInvestmentTrackOptions () {
       try {
         // get companies_options and selected_company
+        this.filtersData.selected_investment_track = []
         const response = await this.$http.get('investmentTrackOptions/')
         // JSON responses are automatically parsed.
         for (const arr in response.data.json_list) {
           for (const investmentTrack in arr) {
             const investmentTrackStr = response.data.json_list[arr][investmentTrack]
             if (investmentTrackStr) {
+              this.filtersData.selected_investment_track.push(investmentTrackStr)
               this.investment_track_options.push(investmentTrackStr)
-              this.selected_investment_track.push(investmentTrackStr)
             }
           }
         }
       } catch (error) {
         console.log(error)
       }
+    },
+    update (key, value) {
+      this.filtersData[key] = value
+      this.$emit('input', { ...this.filtersData })
     }
   }
 }
@@ -81,13 +109,19 @@ export default {
   }
   .wrapper {
     display: grid;
-    grid-template-columns: 200px 400px;
+    grid-template-columns: 15% 70%;
     column-gap: 10px;
-    row-gap: 1em;
+    padding-bottom: 1em;
   }
   .multiselect {
-    width: 600px;
-    height: 80px;
+    width: 60%;
+    height: var(--height)+ px;
+  }
+  .wrapper-alert {
+    display: grid;
+    grid-template-columns: 30px 500px;
+    color:red;
+    align-items: center;
   }
 
 </style>
