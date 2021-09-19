@@ -184,7 +184,7 @@ export default {
   .filters{
     direction: rtl;
     padding: 10px;
-    background: rgb(106, 179, 179);
+    background: rgba(147, 154, 154, 0.2);
     height: 100%;
     text-align: justify;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);

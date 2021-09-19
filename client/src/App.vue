@@ -30,7 +30,7 @@ export default {
     height:100px;
   }
   #router{
-    padding: 75px 30px 5px;
+    padding-top: 75px;
   }
 
 </style>
