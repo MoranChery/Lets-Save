@@ -2,41 +2,79 @@
     <div>
       <h2>בחירת סכומים:</h2>
       <h6>&#9888;שים לב כי את הפרטים הבאים חובה עליך למלא</h6>
-      <div class="wrapper">
-        <p>הפקדה חד פעמית (ש"ח):</p>
-        <input id="oneTimeDeposit" Placeholder= "הזן מספר (0 או יותר)" v-bind:value="providentFundCalculatorData.oneTimeDeposit" @input="update('oneTimeDeposit', $event.target.value)" min="0" type="number"/>
-      </div>
-      <div class="wrapper">
-        <p>הפקדה חודשית (ש"ח):</p>
-        <input id="mDeposit" Placeholder= "הזן מספר (0 או יותר)" v-bind:value="providentFundCalculatorData.mDeposit" @input="update('mDeposit', $event.target.value)" type="number" min="0"/>
-      </div>
+      <b-container>
+        <b-row>
+          <b-col sm="3">
+            <p>הפקדה חד פעמית (ש"ח):</p>
+          </b-col>
+          <b-col sm="5">
+            <b-input-group prepend="">
+              <b-form-input id="oneTimeDeposit" placeholder= "הזן מספר (0 או יותר)" v-model="providentFundCalculatorData.oneTimeDeposit" min="0" type="number"></b-form-input>
+            </b-input-group>
+          </b-col>
+        </b-row>
+      </b-container>
+      <b-container>
+        <b-row>
+          <b-col sm="3">
+            <p>הפקדה חודשית (ש"ח):</p>
+          </b-col>
+          <b-col sm="5">
+            <b-input-group prepend="">
+              <b-form-input id="mDeposit" Placeholder= "הזן מספר (0 או יותר)" v-model="providentFundCalculatorData.mDeposit" type="number" min="0"></b-form-input>
+            </b-input-group>
+          </b-col>
+        </b-row>
+      </b-container>
       <div v-if="!providentFundCalculatorData.isValidMDepositAndOneDeposit" class="wrapper-alert">
           <h6 style="font-size:24px; font-weight: bold;"> &#128712;</h6>
           <h6>הפקדה חד פעמית או הפקדה חודשית צריכים להיות גדולים מ-0</h6>
       </div>
-      <div class="wrapper">
-        <p>לפי:</p>
-        <select v-model="selectedTime" @select="update('selectedTime', $event.target.value)">
-          <option >שנים</option>
-          <option>חודשים</option>
-        </select>
-      </div>
-      <div class="wrapper">
-        <p>לכמה {{selectedTime}}:</p>
-        <input id="numTime" Placeholder= "הזן מספר" v-bind:value="providentFundCalculatorData.numTime" @input="update('numTime', $event.target.value)" type="number" min="1"/>
-      </div>
-      <div v-if="!providentFundCalculatorData.isValidSelectedTime" class="wrapper-alert">
-        <h6 style="font-size:24px; font-weight: bold;"> &#128712;</h6>
-        <h6>מספר ה{{selectedTime}} חייב להיות 1 או יותר</h6>
-      </div>
-      <div class="wrapper">
-        <p>חישוב תשואה:</p>
-        <select v-model="selectedYearsCompared" @select="update('selectedYearsCompared', $event.target.value)">
-          <option>לפי השנה האחרונה</option>
-          <option>לפי ה-3 שנים האחרונות</option>
-          <option>לפי ה-5 שנים האחרונות</option>
-        </select>
-      </div>
+      <b-container>
+        <b-row>
+          <b-col sm="3">
+            <p>לפי:</p>
+          </b-col>
+          <b-col sm="5">
+            <b-form-select v-model="selectedTime" chenge="update('selectedTime', $event.target.value)" class="mb-3">
+              <b-form-select-option value="שנים">שנים</b-form-select-option>
+              <b-form-select-option value="חודשים">חודשים</b-form-select-option>
+            </b-form-select>
+          </b-col>
+        </b-row>
+      </b-container>
+      <b-container>
+        <b-row>
+          <b-col sm="3">
+            <p>לכמה {{selectedTime}}:</p>
+          </b-col>
+          <b-col sm="5">
+            <b-input-group prepend="">
+              <b-form-input id="numTime"
+                            placeholder= "הזן מספר"
+                            :state="providentFundCalculatorData.isValidSelectedTime"
+                            aria-describedby="input-live-feedback"
+                            v-model="providentFundCalculatorData.numTime" type="number" min="1"></b-form-input>
+              <b-form-invalid-feedback id="input-live-feedback">מספר ה{{selectedTime}} חייב להיות 1 או יותר</b-form-invalid-feedback>
+            </b-input-group>
+
+          </b-col>
+        </b-row>
+      </b-container>
+      <b-container>
+        <b-row>
+          <b-col sm="3">
+            <p>חישוב תשואה:</p>
+          </b-col>
+          <b-col sm="5">
+            <b-form-select v-model="selectedYearsCompared" chenge="update('selectedYearsCompared', $event.target.value)" class="mb-3">
+              <b-form-select-option value="לפי השנה האחרונה">לפי השנה האחרונה</b-form-select-option>
+              <b-form-select-option value="לפי ה-3 שנים האחרונות">לפי ה-3 שנים האחרונות</b-form-select-option>
+              <b-form-select-option value="לפי ה-5 שנים האחרונות">לפי ה-5 שנים האחרונות</b-form-select-option>
+            </b-form-select>
+          </b-col>
+        </b-row>
+      </b-container>
     </div>
 </template>
 
@@ -81,6 +119,8 @@ export default {
   },
   methods: {
     update (key, value) {
+      console.log('key: ', key)
+      console.log('value: ', value)
       this.providentFundCalculatorData[key] = value
       this.$emit('input', { ...this.providentFundCalculatorData })
     }
@@ -99,12 +139,6 @@ export default {
     font-size: 18px;
     color: #090952;
     font-weight: bold;
-  }
-  .wrapper {
-    display: grid;
-    grid-template-columns: 15% 30%;
-    column-gap: 10px;
-    padding-bottom: 0.5em;
   }
   .wrapper-alert {
     display: grid;
