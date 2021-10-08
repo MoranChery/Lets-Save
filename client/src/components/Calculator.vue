@@ -9,7 +9,7 @@
           </b-col>
           <b-col sm="5">
             <b-input-group prepend="">
-              <b-form-input id="oneTimeDeposit" placeholder= "הזן מספר (0 או יותר)" v-model="providentFundCalculatorData.oneTimeDeposit" min="0" type="number"></b-form-input>
+              <b-form-input id="oneTimeDeposit" :state="providentFundCalculatorData.isValidMDepositAndOneDeposit" placeholder= "הזן מספר (0 או יותר)" v-model="providentFundCalculatorData.oneTimeDeposit" min="0" type="number"></b-form-input>
             </b-input-group>
           </b-col>
         </b-row>
@@ -21,15 +21,13 @@
           </b-col>
           <b-col sm="5">
             <b-input-group prepend="">
-              <b-form-input id="mDeposit" Placeholder= "הזן מספר (0 או יותר)" v-model="providentFundCalculatorData.mDeposit" type="number" min="0"></b-form-input>
+              <b-form-input id="mDeposit" Placeholder= "הזן מספר (0 או יותר)"
+                            :state="providentFundCalculatorData.isValidMDepositAndOneDeposit" v-model="providentFundCalculatorData.mDeposit" type="number" min="0"></b-form-input>
+               <b-form-invalid-feedback id="input-live-feedback">הפקדה חד פעמית או הפקדה חודשית צריכים להיות גדולים מ-0</b-form-invalid-feedback>
             </b-input-group>
           </b-col>
         </b-row>
       </b-container>
-      <div v-if="!providentFundCalculatorData.isValidMDepositAndOneDeposit" class="wrapper-alert">
-          <h6 style="font-size:24px; font-weight: bold;"> &#128712;</h6>
-          <h6>הפקדה חד פעמית או הפקדה חודשית צריכים להיות גדולים מ-0</h6>
-      </div>
       <b-container>
         <b-row>
           <b-col sm="3">

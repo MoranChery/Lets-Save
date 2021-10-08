@@ -2,25 +2,42 @@
   <div>
     <h2>סינונים אפשריים:</h2>
     <h6>&#9888;שים לב כי במידה ואינך יודע אשאר את הנתונים כפי שהם</h6>
-    <div class="wrapper">
-      <p>בחר מסלולים:</p>
-      <multiselect :style="cssVars" v-model="filtersData.selected_investment_track" placeholder="הוסף או הסר מסלול" selectedLabel="" deselectLabel="הסר" selectLabel="בחר" :options="investment_track_options" :multiple="true" @change="update('selected_investment_track', $event.target.value)"></multiselect>
-    </div>
-    <div v-if="!filtersData.isValidSelectedInvestmentTrack" class="wrapper-alert">
-      <h6 style="font-size:24px; font-weight: bold;"> &#128712;</h6>
-      <h6>יש לבחור לפחות מסלול אחד</h6>
-    </div>
-    <div class="wrapper">
-      <p>דמי ניהול עד:</p>
-      <div class="wrapper">
-        <input id="management_fee" Placeholder= "יש לשים מספר" v-bind:value="filtersData.management_fee" @input="update('management_fee', $event.target.value)" min="0" type="number"/>
-        <p>%</p>
-      </div>
-    </div>
-    <div v-if="!filtersData.isValidManagementFee" class="wrapper-alert">
-      <h6 style="font-size:24px; font-weight: bold;"> &#128712;</h6>
-      <h6>יש לבחור לפחות מסלול אחד</h6>
-    </div>
+    <b-container>
+      <b-row>
+        <b-col sm="3">
+          <p>בחר מסלולים:</p>
+        </b-col>
+        <b-col sm="8" style="padding-bottom:5px">
+          <multiselect :style="cssVars" v-model="filtersData.selected_investment_track" placeholder="הוסף או הסר מסלול" selectedLabel="" deselectLabel="הסר" selectLabel="בחר"
+                       :options="investment_track_options" :multiple="true" @change="update('selected_investment_track', $event.target.value)"></multiselect>
+        </b-col>
+      </b-row>
+    </b-container>
+    <b-container v-if="!filtersData.isValidSelectedInvestmentTrack ">
+      <b-row style="align-items: center;">
+        <b-col sm="3"></b-col>
+        <b-col>
+          <h4>יש לבחור לפחות מסלול אחד</h4>
+        </b-col>
+      </b-row>
+    </b-container>
+    <b-container>
+        <b-row>
+          <b-col sm="3">
+            <p>דמי ניהול עד:</p>
+          </b-col>
+          <b-col sm="5">
+            <b-input-group prepend="%">
+              <b-form-input id="management_fee"
+                            placeholder= "יש לשים מספר"
+                            :state="filtersData.isValidManagementFee"
+                            aria-describedby="input-live-feedback"
+                            v-model="filtersData.management_fee" type="number" min="0.000001"></b-form-input>
+              <b-form-invalid-feedback id="input-live-feedback">דמי ניהול חייב להיות גדול מ-0</b-form-invalid-feedback>
+            </b-input-group>
+          </b-col>
+        </b-row>
+      </b-container>
   </div>
 </template>
 <script>
@@ -107,21 +124,12 @@ export default {
     color: #090952;
     font-weight: bold;
   }
-  .wrapper {
-    display: grid;
-    grid-template-columns: 15% 70%;
-    column-gap: 10px;
-    padding-bottom: 1em;
-  }
-  .multiselect {
-    width: 60%;
-    height: var(--height)+ px;
-  }
-  .wrapper-alert {
-    display: grid;
-    grid-template-columns: 30px 500px;
-    color:red;
-    align-items: center;
+  h4{
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+    color: #dc3545;
+    font-weight:normal;
   }
 
 </style>

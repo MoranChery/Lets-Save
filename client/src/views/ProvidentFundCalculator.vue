@@ -26,14 +26,14 @@ export default {
         numTime: 1,
         selectedTime: 'שנים',
         selectedYearsCompared: 'לפי השנה האחרונה',
-        isValidMDepositAndOneDeposit: true,
-        isValidSelectedTime: true
+        isValidMDepositAndOneDeposit: null,
+        isValidSelectedTime: null
       },
       filtersData: {
         management_fee: 2,
         selected_investment_track: [],
         isValidSelectedInvestmentTrack: true,
-        isValidManagementFee: true,
+        isValidManagementFee: null,
         height: 100
       }
     }
@@ -168,11 +168,9 @@ export default {
     margin-top: 1%;
   }
   .sticky{
-    position: sticky;
     background-color: white;
     padding-right: 10px;
     padding-bottom: 10px;
-    top: 65px;
   }
   h1{
     direction: rtl;
