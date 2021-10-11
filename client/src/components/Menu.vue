@@ -1,31 +1,20 @@
 <template>
 <div>
-  <b-navbar type="dark" variant="dark">
+  <b-navbar type="dark" variant="dark" >
     <b-navbar-brand class="logo">
       <img class="logo-img" src="../assets/logo.png" alt="Logo">
       Smart Save
     </b-navbar-brand>
-    <b-navbar-nav>
-      <b-nav-item to="/" v-on:click="setActive('home')" :class="{ active: isActive('home') }">Home</b-nav-item>
-      <b-nav-item to="/provident_fund_calculator" v-on:click="setActive('provident_fund_calculator')" :class="{ active: isActive('provident_fund_calculator') }">PPF Calculator</b-nav-item>
+    <b-navbar-nav class="navbar-nav ml-auto mb-2 mb-lg-0">
+      <b-nav-item to="/provident_fund_calculator">PPF Calculator</b-nav-item>
+      <b-nav-item to="/">דף הבית</b-nav-item>
     </b-navbar-nav>
   </b-navbar>
 </div>
 </template>
 <script>
 export default {
-  name: 'Menu',
-  data () {
-    return { activeItem: 'home' }
-  },
-  methods: {
-    isActive: function (menuItem) {
-      return this.activeItem === menuItem
-    },
-    setActive: function (menuItem) {
-      this.activeItem = menuItem
-    }
-  }
+  name: 'Menu'
 }
 </script>
 <style scoped>
@@ -41,10 +30,6 @@ export default {
   }
   ::v-deep {
     color: white !important;
-    font-weight: bold;
-  }
-  ::v-deep .active .nav-link {
-    color: #6d9af5 !important;
     font-weight: bold;
   }
   .logo{
