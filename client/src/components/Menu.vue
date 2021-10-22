@@ -8,14 +8,13 @@
     </b-navbar-brand>
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
-      <!-- Right aligned nav items -->
-      <b-navbar-nav class="ml-auto">
-        <b-nav-item-dropdown text="מחשבונים" right>
-          <b-dropdown-item to="/provident_fund_calculator">קופת גמל</b-dropdown-item>
-        </b-nav-item-dropdown>
+      <b-navbar-nav class="ml-auto" dir="rtl">
         <b-navbar-nav>
           <b-nav-item to="/">דף הבית</b-nav-item>
         </b-navbar-nav>
+        <b-nav-item-dropdown class="dropdownCalculator" text="מחשבונים" right>
+          <b-dropdown-item dir="rtl" to="/provident_fund_calculator">קופת גמל</b-dropdown-item>
+        </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -44,7 +43,10 @@ export default {
     font-weight: bold;
   }
   .logo{
-    padding-right: 15px;
     font-size: 25px;
+  }
+  ::v-deep .dropdown-item {
+    direction: rtl !important;
+    text-align: justify !important;
   }
 </style>
