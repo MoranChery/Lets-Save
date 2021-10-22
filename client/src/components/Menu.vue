@@ -46,7 +46,22 @@ export default {
     font-size: 25px;
   }
   ::v-deep .dropdown-item {
-    direction: rtl !important;
-    text-align: justify !important;
+    direction: rtl;
+    text-align: justify;
+  }
+  ::v-deep .navbar-collapse ul {
+    direction: rtl;
+    text-align: justify;
+    justify-content: stretch;
+    padding-inline-start: 0px;
+  }
+  ::v-deep .navbar{
+    padding-left: 10px;
+  }
+  ::v-deep .navbar-collapse li {
+    direction: rtl;
+    text-align: justify;
+    justify-content: stretch;
+    padding-inline-start: 10px;
   }
 </style>
