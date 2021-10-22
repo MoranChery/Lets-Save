@@ -25,7 +25,11 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  routes
+  behavior: 'smooth',
+  routes,
+  scrollBehavior () {
+    document.getElementById('app').scrollIntoView()
+  }
 })
 
 export default router
