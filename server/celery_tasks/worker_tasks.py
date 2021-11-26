@@ -70,11 +70,11 @@ def update_monthly_yield_fund(monthly_yield_fund):
         db.session.commit()
 
 
-@celery.task(
-    # run_every=(crontab(minute=4, hour=7)),# Israel time = UTC + 3
+@periodic_task(
+    run_every=(crontab(hour=11, minute=2)),  # Israel time
     name="get_provident_fund_data_and_add_to_db",
-    ignore_result=True, bind= True)
-def get_provident_fund_data_and_add_to_db(self):
+    ignore_result=True)
+def get_provident_fund_data_and_add_to_db():
     print("-----------------------Start-----------------------")
     with app.app_context():
         start_time = datetime.datetime.now()
@@ -194,12 +194,12 @@ def get_provident_fund_data_and_add_to_db(self):
         print("Takes ", date_time_difference_in_min, " Minutes")
 
 
-@celery.on_after_configure.connect
-def setup_periodic_tasks(sender, **kwargs):
-    print("in setup_periodic_tasks")
-    # Executes every Monday morning at 7:30 a.m.
-    sender.add_periodic_task(
-        crontab(hour=10, minute=35),
-        get_provident_fund_data_and_add_to_db.s(),
-        name='get_provident_fund_data_and_add_to_db'
-    )
+# @celery.on_after_configure.connect
+# def setup_periodic_tasks(sender, **kwargs):
+#     print("in setup_periodic_tasks")
+#     # Executes every Monday morning at 7:30 a.m.
+#     sender.add_periodic_task(
+#         crontab(hour=10, minute=35),
+#         get_provident_fund_data_and_add_to_db.s(),
+#         name='get_provident_fund_data_and_add_to_db'
+#     )

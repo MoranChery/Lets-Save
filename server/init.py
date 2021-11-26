@@ -13,8 +13,8 @@ redis_init = ["redis-server.exe", "redis.windows.conf"]
 # celery -A celery_tasks.worker.celery beat
 # celery -A celery_tasks.worker.celery worker --loglevel=info --pool=eventlet --concurrency=2
 # celery beat -A celery_tasks.worker_tasks.celery -l info
-celery_beat = ["celery", "beat", "-A", "celery_tasks.worker_tasks.celery", "-l", "info", "--max-interval", "2"]
-celery_init = ["celery", "-A", "celery_tasks.worker_tasks.celery", "worker", "--loglevel=info", "--pool=eventlet", "--concurrency=2", "--task-events"]
+celery_beat = ["celery", "beat", "-A", "celery_tasks.worker_tasks.celery", "-l", "info"]
+celery_init = ["celery", "-A", "celery_tasks.worker_tasks.celery", "worker", "--loglevel=info", "--pool=eventlet", "--concurrency=2"]
 
 pc_user = "user"
 
