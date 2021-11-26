@@ -17,9 +17,9 @@ class Config(object):
     CELERY_ACCEPT_CONTENT = ['json', 'yaml']
     CELERY_TASK_SERIALIZER = 'json'
     CELERY_RESULT_SERIALIZER = 'json'
-    CELERY_TIMEZONE = 'UTC'
-    CELERY_ENABLE_UTC = True
+    CELERY_ENABLE_UTC = False
     CELERY_SEND_SENT_EVENT = True
+    CELERY_TIMEZONE = 'Asia/Jerusalem'
 
     # API
     API_PREFIX = '/api/v1'
