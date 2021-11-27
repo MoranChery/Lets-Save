@@ -7,6 +7,9 @@ import json
 import urllib.request
 import pandas as pd
 import datetime
+from models.monthly_yield_fund import MonthlyYieldFund
+from models.provident_fund import ProvidentFund
+
 
 app = create_app()
 celery = configure_celery(app)
@@ -28,9 +31,8 @@ def from_string_to_num(val):
 
 
 def update_provident_fund(provident_fund):
-    from models.provident_fund import ProvidentFund
     get_provident_fund = db.session.query(ProvidentFund).filter_by(fund_id=provident_fund["fund_id"])
-    if get_provident_fund:
+    if get_provident_fund.first():
         get_provident_fund.update({
             ProvidentFund.fund_name: provident_fund["fund_name"],
             ProvidentFund.fund_classification: provident_fund["fund_classification"],
@@ -47,31 +49,46 @@ def update_provident_fund(provident_fund):
             ProvidentFund.avg_annual_yield_trailing_5yrs: provident_fund["avg_annual_yield_trailing_5yrs"],
             ProvidentFund.standard_deviation: provident_fund["standard_deviation"],
             ProvidentFund.alpha: provident_fund["alpha"],
-            ProvidentFund.sharpe_ratio: provident_fund["sharpe_ratio"],
+            ProvidentFund.sharpe_ratio: provident_fund["sharpe_ratio"]
         },
             synchronize_session=False)
     else:
-        with db.engine.begin():
-            provident_fund.to_sql('provident_fund', db.engine, if_exists='append', index=False)
+        new_provident_fund = ProvidentFund(
+            fund_name=provident_fund["fund_name"],
+            fund_classification= provident_fund["fund_classification"],
+            management_corporation= provident_fund["management_corporation"],
+            target_population= provident_fund["target_population"],
+            specialization= provident_fund["specialization"],
+            sub_specialization= provident_fund["sub_specialization"],
+            avg_annual_management_fee= provident_fund["avg_annual_management_fee"],
+            avg_deposit_fee= provident_fund["avg_deposit_fee"],
+            year_to_date_yield= provident_fund["year_to_date_yield"],
+            yield_trailing_3_yrs= provident_fund["yield_trailing_3_yrs"],
+            yield_trailing_5_yrs= provident_fund["yield_trailing_5_yrs"],
+            avg_annual_yield_trailing_3yrs= provident_fund["avg_annual_yield_trailing_3yrs"],
+            avg_annual_yield_trailing_5yrs= provident_fund["avg_annual_yield_trailing_5yrs"],
+            standard_deviation= provident_fund["standard_deviation"],
+            alpha= provident_fund["alpha"],
+            sharpe_ratio= provident_fund["sharpe_ratio"]
+        )
+        db.session.add(new_provident_fund)
     db.session.commit()
+    db.session.close()
 
 
 def update_monthly_yield_fund(monthly_yield_fund):
-    from models.monthly_yield_fund import MonthlyYieldFund
-    from models.provident_fund import ProvidentFund
     get_monthly_yield_fund = db.session.query(MonthlyYieldFund).filter_by(provident_fund_id=monthly_yield_fund["provident_fund_id"], date=monthly_yield_fund["date"])
-    if not get_monthly_yield_fund:
-        with db.engine.begin():
-            monthly_yield_fund.to_sql('monthly_yield_fund', db.engine, if_exists='append', index=False)
-        get_provident_fund = db.session.query(ProvidentFund).filter_by(fund_id=monthly_yield_fund["fund_id"])
-        new_monthly_yield_fund = db.session.query(MonthlyYieldFund).filter_by(
-                provident_fund_id=monthly_yield_fund["provident_fund_id"], date=monthly_yield_fund["date"])
-        get_provident_fund.monthly_yield.append(new_monthly_yield_fund)
+    if not get_monthly_yield_fund.first():
+        get_provident_fund = db.session.query(ProvidentFund).filter_by(fund_id=monthly_yield_fund["provident_fund_id"]).first()
+        new_monthly_yield_fund = MonthlyYieldFund(provident_fund_id=monthly_yield_fund["provident_fund_id"],
+                                                  date=monthly_yield_fund["date"],
+                                                  monthly_yield=monthly_yield_fund["monthly_yield"], provident_fund= get_provident_fund)
         db.session.commit()
+        db.session.close()
 
 
 @periodic_task(
-    run_every=(crontab(hour=11, minute=2)),  # Israel time
+    run_every=(crontab(hour=22, minute=35)),  # Israel time
     name="get_provident_fund_data_and_add_to_db",
     ignore_result=True)
 def get_provident_fund_data_and_add_to_db():
@@ -119,12 +136,11 @@ def get_provident_fund_data_and_add_to_db():
                    "YIELD_TRAILING_3_YRS",
                    "YIELD_TRAILING_5_YRS",
                    'AVG_ANNUAL_YIELD_TRAILING_3YRS',  # תשואה מצטברת ל-3 שנים
-                   'AVG_ANNUAL_YIELD_TRAILING_5YRS'  # תשואה מצטברת ל-5 שנים
+                   'AVG_ANNUAL_YIELD_TRAILING_5YRS',  # תשואה מצטברת ל-5 שנים
                    "STANDARD_DEVIATION",
                    "ALPHA",
                    "SHARPE_RATIO"]
         df_need_col = pd.DataFrame(df, columns=columns)
-        df_need_col = df_need_col.dropna()
 
         # Step 2: Create table for monthly yield for each fund
         print("Step 2: Create table for monthly yield for each fund")
@@ -156,6 +172,10 @@ def get_provident_fund_data_and_add_to_db():
         df_provident_fund_after_filter = df_provident_fund.loc[df_provident_fund.REPORT_PERIOD == report_period]
         df_provident_fund_after_filter = df_provident_fund_after_filter.drop(columns=['REPORT_PERIOD'])
 
+        # db.session.query(ProvidentFund).delete()
+        # db.session.query(MonthlyYieldFund).delete()
+        # db.session.commit()
+
         # Step 4: Insert provident_fund to DB
         print("Step 4: Insert provident_fund to DB")
         df_provident_fund_after_filter.columns = ['fund_id',
@@ -175,6 +195,8 @@ def get_provident_fund_data_and_add_to_db():
                                                   'standard_deviation',
                                                   'alpha',
                                                   'sharpe_ratio']
+        df_provident_fund_after_filter.reset_index(drop=True, inplace=True)
+
         for index, row in df_provident_fund_after_filter.iterrows():
             update_provident_fund(row)
 
@@ -184,6 +206,7 @@ def get_provident_fund_data_and_add_to_db():
                                          'date',
                                          'monthly_yield'
                                          ]
+        df_monthly_yield_fund.reset_index(drop=True, inplace=True)
         for index, row in df_monthly_yield_fund.iterrows():
             update_monthly_yield_fund(row)
 
@@ -192,14 +215,3 @@ def get_provident_fund_data_and_add_to_db():
         date_time_difference_in_min = date_time_difference.total_seconds() / 60
         print("------------------------------FIN------------------------------")
         print("Takes ", date_time_difference_in_min, " Minutes")
-
-
-# @celery.on_after_configure.connect
-# def setup_periodic_tasks(sender, **kwargs):
-#     print("in setup_periodic_tasks")
-#     # Executes every Monday morning at 7:30 a.m.
-#     sender.add_periodic_task(
-#         crontab(hour=10, minute=35),
-#         get_provident_fund_data_and_add_to_db.s(),
-#         name='get_provident_fund_data_and_add_to_db'
-#     )

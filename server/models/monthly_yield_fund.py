@@ -1,6 +1,5 @@
 from sqlalchemy import inspect
 from app.extensions import db
-from sqlalchemy.orm import relationship
 
 
 class MonthlyYieldFund(db.Model):
@@ -9,8 +8,8 @@ class MonthlyYieldFund(db.Model):
 
     date = db.Column(db.DATE, primary_key=True)
     monthly_yield = db.Column(db.DECIMAL, nullable=True)
-    provident_fund_id = db.Column(db.Integer, db.ForeignKey('provident_fund.fund_id'),primary_key=True)
-    provident_fund = relationship("ProvidentFund", back_populates="monthly_yield")
+    provident_fund_id = db.Column(db.Integer, db.ForeignKey('provident_fund.fund_id'), primary_key=True)
+
 
     @staticmethod
     def columns():
