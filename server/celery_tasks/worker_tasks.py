@@ -82,7 +82,7 @@ def update_monthly_yield_fund(monthly_yield_fund):
         get_provident_fund = db.session.query(ProvidentFund).filter_by(fund_id=monthly_yield_fund["provident_fund_id"]).first()
         new_monthly_yield_fund = MonthlyYieldFund(provident_fund_id=monthly_yield_fund["provident_fund_id"],
                                                   date=monthly_yield_fund["date"],
-                                                  monthly_yield=monthly_yield_fund["monthly_yield"], provident_fund= get_provident_fund)
+                                                  monthly_yield=monthly_yield_fund["monthly_yield"], provident_fund=get_provident_fund)
         db.session.commit()
         db.session.close()
 
