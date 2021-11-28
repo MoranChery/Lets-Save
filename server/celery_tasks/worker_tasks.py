@@ -77,14 +77,15 @@ def update_provident_fund(provident_fund):
 
 
 def update_monthly_yield_fund(monthly_yield_fund):
-    get_monthly_yield_fund = db.session.query(MonthlyYieldFund).filter_by(provident_fund_id=monthly_yield_fund["provident_fund_id"], date=monthly_yield_fund["date"])
-    if not get_monthly_yield_fund.first():
-        get_provident_fund = db.session.query(ProvidentFund).filter_by(fund_id=monthly_yield_fund["provident_fund_id"]).first()
-        new_monthly_yield_fund = MonthlyYieldFund(provident_fund_id=monthly_yield_fund["provident_fund_id"],
-                                                  date=monthly_yield_fund["date"],
-                                                  monthly_yield=monthly_yield_fund["monthly_yield"], provident_fund=get_provident_fund)
-        db.session.commit()
-        db.session.close()
+    if monthly_yield_fund["monthly_yield"]:
+        get_monthly_yield_fund = db.session.query(MonthlyYieldFund).filter_by(provident_fund_id=monthly_yield_fund["provident_fund_id"], date=monthly_yield_fund["date"])
+        if not get_monthly_yield_fund.first():
+            get_provident_fund = db.session.query(ProvidentFund).filter_by(fund_id=monthly_yield_fund["provident_fund_id"]).first()
+            new_monthly_yield_fund = MonthlyYieldFund(provident_fund_id=monthly_yield_fund["provident_fund_id"],
+                                                      date=monthly_yield_fund["date"],
+                                                      monthly_yield=monthly_yield_fund["monthly_yield"], provident_fund=get_provident_fund)
+            db.session.commit()
+            db.session.close()
 
 
 @periodic_task(
@@ -206,6 +207,7 @@ def get_provident_fund_data_and_add_to_db():
                                          'date',
                                          'monthly_yield'
                                          ]
+
         df_monthly_yield_fund.reset_index(drop=True, inplace=True)
         for index, row in df_monthly_yield_fund.iterrows():
             update_monthly_yield_fund(row)
