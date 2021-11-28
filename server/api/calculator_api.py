@@ -2,82 +2,77 @@ from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 from app.configurations import Config
 from app.extensions import db
-from models.definitions import Definitions
+from sqlalchemy import or_
+from models.provident_fund import ProvidentFund
 
 
 class Calculator(MethodView):
 
+    @property
     def get(self):
-        data_form = request.form.to_dict()
-        # סינון הנתונים לפי מסלולים ודמי ניהול
-        # נבדוק שהרשימה שחוזרת גדולה מ-0
+        try:
+            data_form = request.form.to_dict()
+            specialization_selected = data_form["filtersData"]["selected_investment_track"]
+            avg_annual_management_fee_selected = data_form["filtersData"]["management_fee"]
 
-        # חישבו ראשון סכום הפקדה מצטבר
+            # Filtering the data by specialization and management fees
+            all_fund = db.session.query(ProvidentFund).filter(ProvidentFund.specialization.in_(specialization_selected),
+                                                              or_(
+                                                                  ProvidentFund.avg_annual_management_fee <= avg_annual_management_fee_selected,
+                                                                  ProvidentFund.avg_annual_management_fee is None)).all()
 
-        # לכל קופה אפשרית נחשב :
-        # הסכום שהצטבר
-        # רוח לפני מס
-        # רווח אחרי מס
-        # סך דמי ניהול שישולם
+            # We will check that the returning list is greater than 0
+            if len(all_fund) > 0:
+                # Cumulative deposit amount
+                if data_form["providentFundCalculatorData"]["selectedTime"] == 'שנים':
+                    number_of_months = 12 * data_form["providentFundCalculatorData"]["numTime"]
+                else:
+                    number_of_months = data_form["providentFundCalculatorData"]["numTime"]
 
-        # הצגת נתונים על הקופה :
-        # דמי ניהול
-        # תשואה ממוצעת לפי מה שנבחר- מוגדש
-        # תשואה לפי השאר
-        # לינק למידע נוסף
+                amount_deposit = number_of_months * data_form["providentFundCalculatorData"]["mDeposit"] + \
+                                 data_form["providentFundCalculatorData"]["oneTimeDeposit"]
+                return_calculator_fund = []
+                for fund in all_fund:
+                    # TODO
+                    fund_calculator = {
+                        "amount_accumulated": 0,  # הסכום שהצטבר
+                        "profit_before_tax": 0,  # רוןח לפני מס
+                        "profit_after_tax": 0,  # רווח אחרי מס
+                        "total_management_fee": 0,  # סך דמי ניהול שישולם
+                        "percentage_management_fee": 0,  # דמי ניהול
+                        "chosen_yield": "",
+                        "percentage_average_chosen": 0,  # תשואה ממוצעת לפי מה שנבחר- מוגדש
+                        "yield_else1": 0,  # תשואה לפי השאר
+                        "yield_else2": 0  # תשואה לפי השאר
+                    }
+                    return_calculator_fund.append(fund_calculator)
 
-        # description_needed = [
-        #                         {
-        #                             "definitions_name":'FUND_NAME',
-        #                             "description": "שם המסלול לפי  החברה - לא חלק משאלות ששואלים את המשתמש"
-        #                         },
-        #                         {
-        #                             "definitions_name": 'FUND_CLASSIFICATION',
-        #                             "description": "סוג הקופה"
-        #                         },
-        #                         {
-        #                             "definitions_name": 'MANAGING_CORPORATION',
-        #                             "description": "החברה שמנהלת את הקופה"
-        #                         },
-        #                         {
-        #                             "definitions_name": 'TARGET_POPULATION',
-        #                             "description": "אוכלוסיית יעד"
-        #                         },
-        #                         {
-        #                             "definitions_name": 'SPECIALIZATION',
-        #                             "description": "התמחות עיקרית"
-        #                         },
-        #                         {
-        #                             "definitions_name": 'SUB_SPECIALIZATION',
-        #                             "description": "התמחות משנית"
-        #                         },
-        #                         {
-        #                             "definitions_name": "AVG_ANNUAL_MANAGEMENT_FEE",
-        #                             "description": "דמי ניהול ממוצעים- מחסכון"
-        #                         },
-        #                         {
-        #                              "definitions_name": "AVG_DEPOSIT_FEE",
-        #                              "description": "דמי ניהול ממוצעים- מהפקדה"
-        #                         },
-        #                         {
-        #                             "definitions_name": "YEAR_TO_DATE_YIELD",
-        #                             "description": "תשואה שנתית"
-        #                         },
-        #                         {
-        #                             "definitions_name": "AVG_ANNUAL_YIELD_TRAILING_3YRS",
-        #                             "description": "תשואה מצטברת ל-3 שנים"
-        #                         },
-        #                         {
-        #                             "definitions_name": "AVG_ANNUAL_YIELD_TRAILING_5YRS",
-        #                             "description": "תשואה מצטברת ל-5 שנים"
-        #                         }
-        #                     ]
-        # for definition in description_needed:
-        #     new_description = Definitions(definitions_name=definition["definitions_name"], description=definition["description"])
-        #     db.session.add(new_description)
-        #     db.session.commit()
-        # response = make_response(jsonify(message='add new definition'), 200)
-        # return response
+                response = make_response(jsonify(message='get all fund by calculator'), 200)
+                return response
+            else:
+                response = make_response(jsonify(message='not found'), 404)
+                return response
+        except Exception:
+            response = make_response(500)
+
+        # {
+        #     providentFundCalculatorData: {
+        #         oneTimeDeposit: 0,
+        #         mDeposit: 0,
+        #         numTime: 1,
+        #         selectedTime: 'שנים',
+        #         selectedYearsCompared: 'לפי השנה האחרונה',
+        #         isValidMDepositAndOneDeposit: null,
+        #         isValidSelectedTime: null
+        #     },
+        #     filtersData: {
+        #         management_fee: 2,
+        #         selected_investment_track: [],
+        #         isValidSelectedInvestmentTrack: true,
+        #         isValidManagementFee: null,
+        #         height: 100
+        #     }
+        # }
 
 
 api = Blueprint('calculator_api', __name__, url_prefix=Config.API_PREFIX + '/calculator')
