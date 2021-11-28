@@ -18,10 +18,12 @@ def create_app():
     # imports api_s
     from api.definitions_api import api as definitions_api
     from api.investment_track_options_api import api as investment_track_options_api
+    from api.calculator_api import api as calculator_api
 
     # register api_s
     app.register_blueprint(definitions_api)
     app.register_blueprint(investment_track_options_api)
+    app.register_blueprint(calculator_api)
 
 
     # Create tables
