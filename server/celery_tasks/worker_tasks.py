@@ -13,7 +13,7 @@ from models.provident_fund import ProvidentFund
 
 app = create_app()
 celery = configure_celery(app)
-report_period = 202109
+report_period = 202201
 
 
 def from_string_to_num(val):
@@ -89,7 +89,7 @@ def update_monthly_yield_fund(monthly_yield_fund):
 
 
 @periodic_task(
-    run_every=(crontab(hour=22, minute=35)),  # Israel time
+    run_every=(crontab(hour=19, minute=49)),  # Israel time
     name="get_provident_fund_data_and_add_to_db",
     ignore_result=True)
 def get_provident_fund_data_and_add_to_db():
