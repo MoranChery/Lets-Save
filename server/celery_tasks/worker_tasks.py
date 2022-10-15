@@ -1,4 +1,4 @@
-from .clr import configure_celery
+from clr import configure_celery
 from celery.schedules import crontab
 from celery.task import periodic_task
 from app.extensions import db
