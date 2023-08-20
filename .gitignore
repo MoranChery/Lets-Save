@@ -26,3 +26,14 @@ pnpm-debug.log*
 /server/celerybeat-schedule.dat
 /server/celerybeat-schedule.dir
 /server/celery_tasks/logs/
+server/__pycache__/log.cpython-311.pyc
+server/api/__pycache__/calculator_api.cpython-311.pyc
+server/api/__pycache__/definitions_api.cpython-311.pyc
+server/api/__pycache__/investment_track_options_api.cpython-311.pyc
+server/app/__pycache__/configurations.cpython-311.pyc
+server/app/__pycache__/extensions.cpython-311.pyc
+server/app/__pycache__/factory.cpython-311.pyc
+server/models/__pycache__/definitions.cpython-311.pyc
+server/models/__pycache__/monthly_yield_fund.cpython-311.pyc
+server/models/__pycache__/provident_fund.cpython-311.pyc
+server/models/__pycache__/register_models.cpython-311.pyc
