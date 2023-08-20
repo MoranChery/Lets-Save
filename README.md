@@ -22,4 +22,8 @@ This site was created to allow a comparison between a variety of provident funds
 ```
 5. Customize configuration:
    See Configuration Reference- https://cli.vuejs.org/config/.
-```
+   
+**server** side:**
+
+1. python init.py 
+
